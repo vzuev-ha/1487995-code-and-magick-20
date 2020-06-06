@@ -15,11 +15,14 @@
     "eslint-config-htmlacademy": "0.5.2"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "ansi-escapes": "^4.3.1",
+    "chalk": "^4.0.0"
+  },
   "scripts": {
     "test": "eslint js/"
   },
   "engines": {
-    "node": "8.11"
+    "node": "12.17.0"
   }
 }
