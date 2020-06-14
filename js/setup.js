@@ -16,6 +16,8 @@ var COAT_COLORS = [
 
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 
+var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+
 var WIZARDS_COUNT = 4;
 
 
@@ -90,6 +92,7 @@ function fillWizardsBlock(wizardsPlaceholder) {
     .content
     .querySelector('.setup-similar-item');
 
+  wizardsPlaceholder.innerHTML = '';
   // Заполним массив HTML-нодами "Маг", генерируя магов со случайными параметрами
   var wizardsArray = [];
 
@@ -101,9 +104,40 @@ function fillWizardsBlock(wizardsPlaceholder) {
   wizardsPlaceholder.appendChild(createWizards(wizardsArray));
 }
 
-function showSetupWindow() {
+function onClickWizardAndFireball(evt) {
+  var setupWizard = document.querySelector('.setup-player');
+  var newColor;
+
+  if (evt.target) {
+    if (evt.target.classList.contains('wizard-coat')) {
+      newColor = COAT_COLORS[getRandomIntInclusive(0, COAT_COLORS.length - 1)];
+      setupWizard.querySelector('input[name="coat-color"]').value = newColor;
+      evt.target.style.fill = newColor;
+    } else if (evt.target.classList.contains('wizard-eyes')) {
+      newColor = EYES_COLORS[getRandomIntInclusive(0, EYES_COLORS.length - 1)];
+      setupWizard.querySelector('input[name="eyes-color"]').value = newColor;
+      evt.target.style.fill = newColor;
+    } else if (evt.target.classList.contains('setup-fireball')) {
+      newColor = FIREBALL_COLORS[getRandomIntInclusive(0, FIREBALL_COLORS.length - 1)];
+      setupWizard.querySelector('input[name="fireball-color"]').value = newColor;
+      evt.target.style.backgroundColor = newColor;
+    }
+  }
+}
+
+
+function onPopupEscPress(evt) {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    closePopup();
+  }
+}
+
+
+function openPopup() {
   // Найдем окно настроек и выведем его
-  document.querySelector('.setup').classList.remove('hidden');
+  var setup = document.querySelector('.setup');
+  setup.classList.remove('hidden');
 
   // Найдем блок для показа магов
   var wizardsPlaceholder = document.querySelector('.setup-similar-list');
@@ -113,7 +147,55 @@ function showSetupWindow() {
 
   // Отобразим блок со списком магов
   document.querySelector('.setup-similar').classList.remove('hidden');
+
+  // Привяжем к документу обработчик закрытия по Esc
+  document.addEventListener('keydown', onPopupEscPress);
+
+
+  // Привяжем обработчики закрытия к крестику по клику и Enter
+  var setupClose = setup.querySelector('.setup-close');
+
+  setupClose.addEventListener('click', function () {
+    closePopup();
+  });
+
+  setupClose.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Enter') {
+      closePopup();
+    }
+  });
+
+  // Привяжем через делегирование обработчик клика по персонажу и смены цветов
+  var setupPlayer = document.querySelector('.setup-player');
+  setupPlayer.addEventListener('click', onClickWizardAndFireball);
+}
+
+function closePopup() {
+  // Найдем окно настроек и скроем его
+  var setup = document.querySelector('.setup');
+  setup.classList.add('hidden');
+
+  document.removeEventListener('keydown', onPopupEscPress);
+
+  // Удалим  обработчик клика по персонажу и смены цветов
+  var setupPlayer = document.querySelector('.setup-player');
+  setupPlayer.removeEventListener('click', onClickWizardAndFireball);
+}
+
+function init() {
+  var setupOpen = document.querySelector('.setup-open');
+
+  setupOpen.addEventListener('click', function () {
+    openPopup();
+  });
+
+  setupOpen.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Enter') {
+      openPopup();
+    }
+  });
 }
 
 // Покажем окно настройки со всеми магами
-showSetupWindow();
+init();
+
