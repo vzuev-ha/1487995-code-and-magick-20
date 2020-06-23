@@ -6,20 +6,22 @@
     var setupWizard = document.querySelector('.setup-player');
     var newColor;
 
-    if (evt.target) {
-      if (evt.target.classList.contains('wizard-coat')) {
-        newColor = window.utils.getRandomCoatColor();
-        setupWizard.querySelector('input[name="coat-color"]').value = newColor;
-        evt.target.style.fill = newColor;
-      } else if (evt.target.classList.contains('wizard-eyes')) {
-        newColor = window.utils.getRandomEyesColor();
-        setupWizard.querySelector('input[name="eyes-color"]').value = newColor;
-        evt.target.style.fill = newColor;
-      } else if (evt.target.classList.contains('setup-fireball')) {
-        newColor = window.utils.getRandomFireballColor();
-        setupWizard.querySelector('input[name="fireball-color"]').value = newColor;
-        evt.target.style.backgroundColor = newColor;
-      }
+    if (!evt.target) {
+      return;
+    }
+
+    if (evt.target.classList.contains('wizard-coat')) {
+      newColor = window.utils.getRandomCoatColor();
+      setupWizard.querySelector('input[name="coat-color"]').value = newColor;
+      evt.target.style.fill = newColor;
+    } else if (evt.target.classList.contains('wizard-eyes')) {
+      newColor = window.utils.getRandomEyesColor();
+      setupWizard.querySelector('input[name="eyes-color"]').value = newColor;
+      evt.target.style.fill = newColor;
+    } else if (evt.target.classList.contains('setup-fireball')) {
+      newColor = window.utils.getRandomFireballColor();
+      setupWizard.querySelector('input[name="fireball-color"]').value = newColor;
+      evt.target.style.backgroundColor = newColor;
     }
   }
 

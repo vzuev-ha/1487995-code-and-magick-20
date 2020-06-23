@@ -54,7 +54,8 @@
    */
   function fillWizardsBlock(wizardsPlaceholder) {
     // Найдем заранее заготовленный HTML-шаблон
-    var template = document.querySelector('#similar-wizard-template')
+    var template = document
+      .querySelector('#similar-wizard-template')
       .content
       .querySelector('.setup-similar-item');
 
