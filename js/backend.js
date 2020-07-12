@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var responseURL = 'https://javascrip t.pages.academy/code-and-magick';
+  var responseURL = 'https://javascript.pages.academy/code-and-magick';
 
   var dataURL = 'https://javascript.pages.academy/code-and-magick/data';
 
