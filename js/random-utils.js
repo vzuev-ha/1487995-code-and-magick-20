@@ -56,4 +56,19 @@
     }
   };
 
+
+  /* *
+ * Создание объекта Маг
+ * @return {{eyesColor: (string), name: string, coatColor: string}} Объект Маг
+ * /
+function generateWizard() {
+
+  return {
+    name: window.utils.getRandomName(),
+    coatColor: window.utils.getRandomCoatColor(),
+    eyesColor: window.utils.getRandomEyesColor()
+  };
+} */
+
+
 })();
