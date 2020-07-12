@@ -25,7 +25,6 @@
     }
   }
 
-
   function onPopupEscPress(evt) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
@@ -33,6 +32,16 @@
         closePopup();
       }
     }
+  }
+
+  function onSubmitDialog(evt) {
+    window.backend.submitSetup(
+        new FormData(window.setup.setupWizardForm),
+        closePopup,
+        window.backend.networkErrorHandler
+    );
+
+    evt.preventDefault();
   }
 
   function closePopup() {
@@ -52,18 +61,22 @@
     // Восстановим положение окна настроек
     setupDialog.style.left = window.setup.setupDialogDefaultCoords.x + 'px';
     setupDialog.style.top = window.setup.setupDialogDefaultCoords.y + 'px';
+
+    // Удалим с диалога обработчик submit
+    window.setup.setupDialogElement.removeEventListener('submit', onSubmitDialog);
   }
 
   function openPopup() {
+    // Запустим загрузку магов. Пока они грузятся, разберемся с отображением окна
+    window.backend.loadWizards(
+        window.setup.fillWizardsBlock,
+        window.backend.networkErrorHandler
+    );
+
+
     // Покажем окно настроек
     var setupDialog = window.setup.setupDialogElement;
     setupDialog.classList.remove('hidden');
-
-    // Найдем блок для показа магов
-    var wizardsPlaceholder = document.querySelector('.setup-similar-list');
-
-    // Заполним этот блок Фрагментом
-    window.setup.fillWizardsBlock(wizardsPlaceholder);
 
     // Отобразим блок со списком магов
     document.querySelector('.setup-similar').classList.remove('hidden');
@@ -96,6 +109,9 @@
     // Сохраним положение окна настроек
     window.setup.setupDialogDefaultCoords.x = setupDialog.offsetLeft;
     window.setup.setupDialogDefaultCoords.y = setupDialog.offsetTop;
+
+    // Навесим на диалог обработчик submit, чтобы перехватить и переопределить его
+    window.setup.setupDialogElement.addEventListener('submit', onSubmitDialog);
   }
 
 

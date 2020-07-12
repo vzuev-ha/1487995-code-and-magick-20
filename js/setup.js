@@ -4,21 +4,8 @@
   var WIZARDS_COUNT = 4;
 
   /**
-   * Создание объекта Маг
-   * @return {{eyesColor: (string), name: string, coatColor: string}} Объект Маг
-   */
-  function generateWizard() {
-
-    return {
-      name: window.utils.getRandomName(),
-      coatColor: window.utils.getRandomCoatColor(),
-      eyesColor: window.utils.getRandomEyesColor()
-    };
-  }
-
-  /**
    * Создание HTML-ноды "Маг" из объекта Маг на основе шаблона
-   * @param {{eyesColor: (string), name: string, coatColor: string}} wizardObject Объект Маг
+   * @param {{colorEyes: (string), name: string, colorCoat: string}} wizardObject Объект Маг
    * @param {ActiveX.IXMLDOMNode | Node} wizardTemplate Шаблон
    * @return {ActiveX.IXMLDOMNode | Node} HTML-нода "Маг"
    */
@@ -26,8 +13,8 @@
     var wizard = wizardTemplate.cloneNode(true);
 
     wizard.querySelector('.setup-similar-label').textContent = wizardObject.name;
-    wizard.querySelector('.wizard-coat').style.fill = wizardObject.coatColor;
-    wizard.querySelector('.wizard-eyes').style.fill = wizardObject.eyesColor;
+    wizard.querySelector('.wizard-coat').style.fill = wizardObject.colorCoat;
+    wizard.querySelector('.wizard-eyes').style.fill = wizardObject.colorEyes;
 
     return wizard;
   }
@@ -48,27 +35,27 @@
   }
 
   /**
-   * Наполнение заранее приготовленного в разметке блока случайными магами
-   * @param {Element} wizardsPlaceholder HTML-элемент, куда будут помещены ноды магов
-   * Функция не возвращает ничего, а работает с входящим объектом по ссылке
+   * Наполнение заранее приготовленного в разметке блока магами
+   * @param {Object} wizardsJSON
+   * Функция не возвращает ничего, а работает с глобальным объектом
    */
-  function fillWizardsBlock(wizardsPlaceholder) {
+  function fillWizardsBlock(wizardsJSON) {
     // Найдем заранее заготовленный HTML-шаблон
     var template = document
       .querySelector('#similar-wizard-template')
       .content
       .querySelector('.setup-similar-item');
 
-    wizardsPlaceholder.innerHTML = '';
+    window.setup.wizardsPlaceholder.innerHTML = '';
     // Заполним массив HTML-нодами "Маг", генерируя магов со случайными параметрами
     var wizardsArray = [];
 
     for (var i = 0; i < WIZARDS_COUNT; i++) {
-      wizardsArray[i] = createWizardFromTemplate(generateWizard(), template);
+      wizardsArray[i] = createWizardFromTemplate(wizardsJSON[i], template);
     }
 
     // Создаем DocumentFragment, наполненный магами, и добавляем его в разметку
-    wizardsPlaceholder.appendChild(createWizards(wizardsArray));
+    window.setup.wizardsPlaceholder.appendChild(createWizards(wizardsArray));
   }
 
 
@@ -83,6 +70,12 @@
     x: 0,
     y: 0
   };
+
+  // Блок для показа магов
+  var wizardsPlaceholder = document.querySelector('.setup-similar-list');
+
+  // HTML-элемент FORM, который отправляется на сервер при нажатии Сохранить
+  var setupWizardForm = document.querySelector('.setup-wizard-form');
 
 
   // Найдем кнопку открытия окна настроек и навесим на нее обработчики
@@ -104,6 +97,8 @@
     setupDialogElement: setupDialogElement,
     setupDialogHandle: setupDialogHandle,
     setupDialogDefaultCoords: setupDialogDefaultCoords,
+    wizardsPlaceholder: wizardsPlaceholder,
+    setupWizardForm: setupWizardForm,
 
     fillWizardsBlock: fillWizardsBlock
   };
