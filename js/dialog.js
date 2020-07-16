@@ -2,29 +2,6 @@
 
 (function () {
 
-  function onClickWizardAndFireball(evt) {
-    var setupWizard = document.querySelector('.setup-player');
-    var newColor;
-
-    if (!evt.target) {
-      return;
-    }
-
-    if (evt.target.classList.contains('wizard-coat')) {
-      newColor = window.utils.getRandomCoatColor();
-      setupWizard.querySelector('input[name="coat-color"]').value = newColor;
-      evt.target.style.fill = newColor;
-    } else if (evt.target.classList.contains('wizard-eyes')) {
-      newColor = window.utils.getRandomEyesColor();
-      setupWizard.querySelector('input[name="eyes-color"]').value = newColor;
-      evt.target.style.fill = newColor;
-    } else if (evt.target.classList.contains('setup-fireball')) {
-      newColor = window.utils.getRandomFireballColor();
-      setupWizard.querySelector('input[name="fireball-color"]').value = newColor;
-      evt.target.style.backgroundColor = newColor;
-    }
-  }
-
   function onPopupEscPress(evt) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
@@ -53,7 +30,7 @@
 
     // Удалим  обработчик клика по персонажу и смены цветов
     var setupPlayer = document.querySelector('.setup-player');
-    setupPlayer.removeEventListener('click', onClickWizardAndFireball);
+    setupPlayer.removeEventListener('click', window.mainWizard.onClickWizardAndFireball);
 
     // Удалим обработчик нажатия мыши на кнопку выбора файла .upload
     window.setup.setupDialogHandle.removeEventListener('mousedown', window.mover.onSetupDialogMouseDown);
@@ -69,7 +46,7 @@
   function openPopup() {
     // Запустим загрузку магов. Пока они грузятся, разберемся с отображением окна
     window.backend.loadWizards(
-        window.setup.fillWizardsBlock,
+        window.similarWizards.successLoadWizards,
         window.backend.networkErrorHandler
     );
 
@@ -100,7 +77,7 @@
 
     // Привяжем через делегирование обработчик клика по персонажу и смены цветов
     var setupPlayer = document.querySelector('.setup-player');
-    setupPlayer.addEventListener('click', onClickWizardAndFireball);
+    setupPlayer.addEventListener('click', window.mainWizard.onClickWizardAndFireball);
 
 
     // Навесим обработчик нажатия мыши на кнопку выбора файла .upload

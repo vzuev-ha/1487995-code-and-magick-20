@@ -37,7 +37,7 @@
     return COLORS[Math.floor(COLORS.length * Math.random())];
    */
 
-  window.utils = {
+  window.randomUtils = {
     getRandomName: function () {
       var randomNameId = getRandomIntInclusive(0, FIRST_NAMES.length - 1);
       return FIRST_NAMES[randomNameId] + ' ' + LAST_NAMES[randomNameId];
